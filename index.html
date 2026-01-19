@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NASA Explorer</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0b0f1a;
+      color: #eaeaea;
+      padding: 20px;
+    }
+
+    .panel {
+      background: #141c2f;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    input, select, button {
+      padding: 6px;
+      margin-right: 10px;
+    }
+
+    button {
+      background: #2c4a8a;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #3b63b8;
+    }
+
+    img {
+      max-width: 100%;
+      margin-top: 15px;
+    }
+
+    #output {
+      margin-top: 20px;
+    }
+  </style>
+
+</head>
+<body>
+
+<h1>NASA Explorer</h1>
+
+<div class="panel">
+  <h3>APOD (Astronomy Picture of the Day)</h3>
+  <input type="date" id="apodDate">
+  <button onclick="loadAPOD()">Load APOD</button>
+</div>
+
+<div class="panel">
+  <h3>Mars Rover Photos</h3>
+
+  <select id="camera">
+    <option value="FHAZ">Front Hazard</option>
+    <option value="RHAZ">Rear Hazard</option>
+    <option value="NAVCAM">Navigation Camera</option>
+    <option value="MAST">Mast Camera</option>
+    <option value="CHEMCAM">ChemCam</option>
+  </select>
+
+  <button onclick="loadMars()">Load Mars Photo</button>
+</div>
+
+<div id="output"></div>
+
+<script src="js/config.js"></script>
+<script src="js/nasa.js"></script>
+
+</body>
+</html>
