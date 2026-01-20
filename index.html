@@ -4,13 +4,8 @@
   <title>NASA Explorer</title>
 
   <style>
-    :root {
-      color-scheme: dark;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -99,19 +94,21 @@
       margin-top: 10px;
     }
   </style>
-
 </head>
+
 <body>
 
 <div class="container">
   <header>
     <h1>NASA Explorer</h1>
-    <p class="subtitle">Discover astronomy highlights and Mars rover imagery with a cleaner, more readable layout.</p>
+    <p class="subtitle">
+      Discover astronomy highlights and Mars rover imagery.
+    </p>
   </header>
 
   <div class="panel">
     <h3>APOD (Astronomy Picture of the Day)</h3>
-    <p>Select a date to explore the featured NASA image and its story.</p>
+    <p>Select a date to explore the featured NASA image.</p>
     <div class="panel-actions">
       <input type="date" id="apodDate">
       <button onclick="loadAPOD()">Load APOD</button>
@@ -120,7 +117,7 @@
 
   <div class="panel">
     <h3>Mars Rover Photos</h3>
-    <p>Choose a rover camera to preview the latest captured terrain.</p>
+    <p>Select a camera.</p>
     <div class="panel-actions">
       <select id="camera">
         <option value="FHAZ">Front Hazard</option>
@@ -129,7 +126,6 @@
         <option value="MAST">Mast Camera</option>
         <option value="CHEMCAM">ChemCam</option>
       </select>
-
       <button onclick="loadMars()">Load Mars Photo</button>
     </div>
   </div>
@@ -137,7 +133,6 @@
   <div id="output" class="panel"></div>
 </div>
 
-<script src="js/config.js"></script>
 <script src="js/nasa.js"></script>
 
 </body>
