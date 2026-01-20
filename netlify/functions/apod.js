@@ -1,36 +1,27 @@
 exports.handler = async (event) => {
+  const apiKey = process.env.NASA_API_KEY;
+  const date = event.queryStringParameters?.date;
+
+  const url =
+    "https://api.nasa.gov/planetary/apod" +
+    "?api_key=" + apiKey +
+    (date ? "&date=" + date : "");
+
   try {
-    const apiKey = process.env.NASA_API_KEY;
-    if (!apiKey) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: { message: "NASA_API_KEY is not set in Netlify environment variables." } })
-      };
-    }
-
-    const qs = event.queryStringParameters || {};
-    const date = qs.date || "";
-
-    const url =
-      "https://api.nasa.gov/planetary/apod" +
-      "?api_key=" + encodeURIComponent(apiKey) +
-      (date ? "&date=" + encodeURIComponent(date) : "");
-
-    const res = await fetch(url);
-    const data = await res.json();
+    const response = await fetch(url);
+    const data = await response.json();
 
     return {
-      statusCode: res.status,
+      statusCode: 200,
       headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-store"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
     };
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: { message: "Function failed", details: String(err) } })
+      body: JSON.stringify({ error: "APOD fetch failed" })
     };
   }
 };
