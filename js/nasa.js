@@ -1,44 +1,53 @@
-const API_KEY = window.NASA_API_KEY;
+// NASA Explorer — secured version
+// Browser never sees the API key
+// Netlify function handles NASA calls
 
 function loadAPOD() {
-  const date = document.getElementById("apodDate").value;
+  const output = document.getElementById("output");
+  const dateInput = document.getElementById("apodDate");
 
-  let url =
-    "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY;
+  let date = dateInput.value;
 
-  if (date) {
-    url += "&date=" + date;
+  if (!date) {
+    date = new Date().toISOString().split("T")[0];
   }
 
-  fetch(url)
-    .then(r => r.json())
-    .then(d => {
-      document.getElementById("output").innerHTML =
-        "<h2>" + d.title + "</h2>" +
-        "<img src='" + d.url + "'>" +
-        "<p>" + d.explanation + "</p>";
-    });
-}
+  const url = "/.netlify/functions/apod?date=" + encodeURIComponent(date);
 
-function loadMars() {
-  const camera = document.getElementById("camera").value;
-
-  const url =
-    "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos" +
-    "?sol=1000&camera=" + camera +
-    "&api_key=" + API_KEY;
+  output.innerHTML = "<p>Loading...</p>";
 
   fetch(url)
-    .then(r => r.json())
-    .then(d => {
-      if (d.photos.length === 0) {
-        document.getElementById("output").innerHTML =
-          "No photos for that camera.";
+    .then(res => res.json())
+    .then(data => {
+
+      if (data.error) {
+        output.innerHTML =
+          "<p style='color:red;'>" + data.error.message + "</p>";
         return;
       }
 
-      document.getElementById("output").innerHTML =
-        "<h2>Mars Rover</h2>" +
-        "<img src='" + d.photos[0].img_src + "'>";
+      if (data.media_type === "image") {
+        output.innerHTML =
+          "<h3>" + data.title + "</h3>" +
+          "<img src='" + data.url + "' style='max-width:100%'>" +
+          "<p>" + data.explanation + "</p>";
+      }
+      else if (data.media_type === "video") {
+        output.innerHTML =
+          "<h3>" + data.title + "</h3>" +
+          "<p><a href='" + data.url +
+          "' target='_blank'>View APOD video</a></p>" +
+          "<p>" + data.explanation + "</p>";
+      }
+      else {
+        output.innerHTML =
+          "<p>Unsupported media type.</p>";
+      }
+
+    })
+    .catch(err => {
+      console.error(err);
+      output.innerHTML =
+        "<p style='color:red;'>Request failed.</p>";
     });
 }
