@@ -1,13 +1,10 @@
-const API_KEY = window.NASA_API_KEY;
-
 function loadAPOD() {
   const date = document.getElementById("apodDate").value;
 
-  let url =
-    "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY;
+  let url = "/.netlify/functions/apod";
 
   if (date) {
-    url += "&date=" + date;
+    url += "?date=" + date;
   }
 
   fetch(url)
@@ -23,10 +20,7 @@ function loadAPOD() {
 function loadMars() {
   const camera = document.getElementById("camera").value;
 
-  const url =
-    "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos" +
-    "?sol=1000&camera=" + camera +
-    "&api_key=" + API_KEY;
+  const url = "/.netlify/functions/mars?camera=" + camera;
 
   fetch(url)
     .then(r => r.json())
