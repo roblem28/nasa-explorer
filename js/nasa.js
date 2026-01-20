@@ -5,40 +5,39 @@ async function loadAPOD() {
   let date = dateInput.value;
 
   if (!date) {
-    const today = new Date();
-    date = today.toISOString().split("T")[0];
+    date = new Date().toISOString().split("T")[0];
   }
 
-  output.innerHTML = "<p>Loading APOD...</p>";
+  output.innerHTML = "Loading…";
 
   try {
     const res = await fetch(`/.netlify/functions/apod?date=${date}`);
     const data = await res.json();
 
     if (data.error) {
-      output.innerHTML =
-        "<p style='color:red;'>" + data.error + "</p>";
+      output.innerHTML = `<p style="color:red">${data.error.message}</p>`;
       return;
     }
 
     if (data.media_type === "image") {
-      output.innerHTML =
-        `<h3>${data.title}</h3>
-         <img src="${data.url}">
-         <p>${data.explanation}</p>`;
+      output.innerHTML = `
+        <h3>${data.title}</h3>
+        <img src="${data.url}">
+        <p>${data.explanation}</p>
+      `;
     } else if (data.media_type === "video") {
-      output.innerHTML =
-        `<h3>${data.title}</h3>
-         <a href="${data.url}" target="_blank">View video</a>
-         <p>${data.explanation}</p>`;
+      output.innerHTML = `
+        <h3>${data.title}</h3>
+        <a href="${data.url}" target="_blank">View video</a>
+        <p>${data.explanation}</p>
+      `;
     } else {
-      output.innerHTML = "<p>Unsupported media type.</p>";
+      output.innerHTML = "Unsupported media type.";
     }
 
   } catch (err) {
     console.error(err);
-    output.innerHTML =
-      "<p style='color:red;'>Failed to load APOD.</p>";
+    output.innerHTML = "Failed to load APOD.";
   }
 }
 
@@ -46,24 +45,23 @@ async function loadMars() {
   const output = document.getElementById("output");
   const camera = document.getElementById("camera").value;
 
-  output.innerHTML = "<p>Loading Mars photo...</p>";
+  output.innerHTML = "Loading Mars photo…";
 
   try {
     const res = await fetch(`/.netlify/functions/mars?camera=${camera}`);
     const data = await res.json();
 
     if (!data || !data.img_src) {
-      output.innerHTML = "<p>No image returned.</p>";
+      output.innerHTML = "No photo available.";
       return;
     }
 
-    output.innerHTML =
-      `<h3>Mars Rover Photo</h3>
-       <img src="${data.img_src}">`;
-
+    output.innerHTML = `
+      <h3>Mars Rover Photo</h3>
+      <img src="${data.img_src}">
+    `;
   } catch (err) {
     console.error(err);
-    output.innerHTML =
-      "<p style='color:red;'>Failed to load Mars photo.</p>";
+    output.innerHTML = "Failed to load Mars photo.";
   }
 }
